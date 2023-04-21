@@ -6,7 +6,8 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     //TODO (This week):
-    //Hold shift to increase movementspeed.
+    //Make Jump less floaty.
+    //Ground cheack.
 
     private PlayerControlls controlls;
     private new Rigidbody rigidbody;
@@ -27,21 +28,26 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float runningSpeed;
 
+    private bool isRunning;
+
     private void Awake()
     {
-        controlls = new PlayerControlls();
         rigidbody = GetComponent<Rigidbody>();
+
+        //Sets up controll map.
+        controlls = new PlayerControlls();
 
         controlls.Gameplay.Jump.performed += ctx => OnJump();
         controlls.Gameplay.Run.performed += ctx => OnRunning(ctx);
-        //controlls.Gameplay.Movement.performed += ctx => OnWalking(ctx.ReadValue<Vector3>());
-        //controlls.Gameplay.Movement.canceled += ctx => OnWalking(Vector3.zero);
+        controlls.Gameplay.Run.canceled += ctx => OnRunning(ctx);
 
+        //Sets the cursor to the center of the screen.
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
+        //Makes sure that movement and aiming goes smoothly fram to fram.
         OnAim();
         OnWalking();
     }
@@ -49,36 +55,44 @@ public class Player : MonoBehaviour
     private void OnJump()
     {
         rigidbody.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+
     }
 
     private void OnWalking()
     {
-        //Vector3 moveDirection = controlls.Gameplay.Movement.ReadValue<Vector3>();
+        Vector3 moveDirection = controlls.Gameplay.Movement.ReadValue<Vector3>();
         //moveDirection.Normalize();
-        transform.Translate(controlls.Gameplay.Movement.ReadValue<Vector3>() * walkingSpeed * Time.deltaTime, Space.Self);
+
+        if (isRunning == true)
+        {
+            transform.Translate(moveDirection * runningSpeed * Time.deltaTime, Space.Self);
+        }
+        else
+        {
+            transform.Translate(moveDirection * walkingSpeed * Time.deltaTime, Space.Self);
+        }
     }
 
+    //While holding "run button" (in this case SHIFT) enable running.
     private void OnRunning(InputAction.CallbackContext context)
     {
-        if (context.ReadValueAsButton() == false)
-        {
-            walkingSpeed = runningSpeed;
-        }
+        isRunning = context.ReadValueAsButton();
     }
 
     private void OnAim()
     {
         Vector2 mouseDirection = controlls.Gameplay.Aim.ReadValue<Vector2>();
-
         float mouseX = mouseDirection.x * mouseSensativety * Time.deltaTime;
         float mouseY = mouseDirection.y * mouseSensativety * Time.deltaTime;
 
+        //Turns the camera with the cursor when it moves up an down.
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 60);
 
         cameraTransform.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
         cameraTransform.Rotate(Vector3.up * mouseX);
 
+        //Turns the player with the cursor when it moves left or right.
         yRotation -= mouseX;
         playerTransform.transform.localRotation = Quaternion.Euler(0, -yRotation, 0);
         playerTransform.Rotate(Vector3.up * mouseX);
@@ -88,7 +102,6 @@ public class Player : MonoBehaviour
     {
         controlls.Gameplay.Enable();
     }
-
     private void OnDisable()
     {
         controlls.Gameplay.Disable();
