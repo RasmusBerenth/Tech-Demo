@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,8 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    //TODO (This week):
-    //Make Jump less floaty.
-    //Ground cheack.
-
     private PlayerControlls controlls;
-    private new Rigidbody rigidbody;
+    private Rigidbody rb;
 
     [SerializeField]
     private Transform cameraTransform;
@@ -32,7 +29,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
 
         //Sets up controll map.
         controlls = new PlayerControlls();
@@ -54,14 +51,12 @@ public class Player : MonoBehaviour
 
     private void OnJump()
     {
-        rigidbody.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
-
+        rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
     }
 
     private void OnWalking()
     {
         Vector3 moveDirection = controlls.Gameplay.Movement.ReadValue<Vector3>();
-        //moveDirection.Normalize();
 
         if (isRunning == true)
         {

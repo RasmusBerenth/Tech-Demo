@@ -465,7 +465,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 1
@@ -2601,6 +2601,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: player
       objectReference: {fileID: 0}
+    - target: {fileID: 6971034144563883752, guid: 2aa2b4d5878018c48a6b9c4c2318305f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6971034144563883752, guid: 2aa2b4d5878018c48a6b9c4c2318305f, type: 3}
+      propertyPath: jumpHeight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7746149981116559946, guid: 2aa2b4d5878018c48a6b9c4c2318305f, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7746149981116559946, guid: 2aa2b4d5878018c48a6b9c4c2318305f, type: 3}
       propertyPath: m_IsKinematic
       value: 0
@@ -3503,7 +3515,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1313513656}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.9, y: -0.297, z: 0}
+  m_LocalPosition: {x: 2.93, y: -0.297, z: -0.01}
   m_LocalScale: {x: 1, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
