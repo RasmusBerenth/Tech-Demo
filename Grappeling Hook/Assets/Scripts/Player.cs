@@ -9,23 +9,35 @@ public class Player : MonoBehaviour
     private PlayerControlls controlls;
     private Rigidbody rb;
 
+    private float xRotation = 0f;
+    private float yRotation = 0f;
+
+    private bool isRunning;
+    private bool isGrounded;
+
+    [Header("Transforms")]
     [SerializeField]
     private Transform cameraTransform;
     [SerializeField]
     private Transform playerTransform;
+    [SerializeField]
+    private Transform groundCheackTransform;
 
-    private float mouseSensativety = 100f;
-    private float xRotation = 0f;
-    private float yRotation = 0f;
-
+    [Header("Movement veriables")]
+    [SerializeField]
+    private float mouseSensativety;
     [SerializeField]
     private float walkingSpeed;
     [SerializeField]
-    private float jumpHeight;
-    [SerializeField]
     private float runningSpeed;
+    [SerializeField]
+    private float jumpHeight;
 
-    private bool isRunning;
+    [Header("GroundCheack veriables")]
+    [SerializeField]
+    private float groundRadious;
+    [SerializeField]
+    private LayerMask whatIsGround;
 
     private void Awake()
     {
@@ -44,6 +56,9 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //Cheacks whether the character is on the ground or not.
+        isGrounded = Physics.CheckSphere(groundCheackTransform.position, groundRadious, whatIsGround);
+
         //Makes sure that movement and aiming goes smoothly fram to fram.
         OnAim();
         OnWalking();
@@ -51,7 +66,11 @@ public class Player : MonoBehaviour
 
     private void OnJump()
     {
-        rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+        //Makes the player jump when they are on the ground.
+        if (isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+        }
     }
 
     private void OnWalking()
