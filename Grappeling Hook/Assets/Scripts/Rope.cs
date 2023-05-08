@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Rope : MonoBehaviour
 {
+    [Header("Rope Variables")]
     [SerializeField]
     private float _maxRopeLength = 100f;
     public float maxRopeLength { get { return _maxRopeLength; } set { _maxRopeLength = value; } }
