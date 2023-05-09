@@ -362,6 +362,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e7a88b247a34ad45a6bd1365dd77d07, type: 3}
+--- !u!1 &6068624351923607214 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3477962245939313563, guid: 1e7a88b247a34ad45a6bd1365dd77d07, type: 3}
+  m_PrefabInstance: {fileID: 7240699193078033717}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7203112814316276446 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1e7a88b247a34ad45a6bd1365dd77d07, type: 3}
@@ -415,6 +420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxRopeLength: 100
   _minRopeLength: 0
+  gunObject: {fileID: 6068624351923607214}
   hookObject: {fileID: 8846592374698298483}
   hookSpeed: 250
   grappelingSpeed: 100

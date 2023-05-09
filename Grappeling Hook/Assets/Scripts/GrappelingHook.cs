@@ -11,6 +11,8 @@ public class GrappelingHook : Rope
 
     [Header("Grappelinghook Variables")]
     [SerializeField]
+    private GameObject gunObject;
+    [SerializeField]
     private GameObject hookObject;
     [SerializeField]
     private float hookSpeed;
@@ -48,6 +50,11 @@ public class GrappelingHook : Rope
     {
         yield return new WaitForSeconds(2);
 
+        hookCollider.enabled = false;
+        hookRigidbody.useGravity = false;
+
+        hookRigidbody.velocity = Vector3.zero;
+        transform.Translate(new Vector3(0, 1, 0) * hookSpeed * Time.deltaTime, Space.Self);
     }
 
     private void Grapple()
@@ -62,7 +69,6 @@ public class GrappelingHook : Rope
 
         }
     }
-
 
     private void OnEnable()
     {
