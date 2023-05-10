@@ -34,6 +34,8 @@ public class GrappelingHook : Rope
     {
         transform.parent = null;
 
+        Vector3 shootDirection = gunObject.transform.localPosition;
+
         hookRigidbody.AddForce(Vector3.forward.normalized * hookSpeed * Time.deltaTime, ForceMode.Impulse);
         hookCollider.enabled = true;
         hookRigidbody.useGravity = true;
@@ -48,13 +50,13 @@ public class GrappelingHook : Rope
 
     IEnumerator Recall()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(5);
 
         hookCollider.enabled = false;
         hookRigidbody.useGravity = false;
 
+        transform.position = new Vector3(0, 1, 0);
         hookRigidbody.velocity = Vector3.zero;
-        transform.Translate(new Vector3(0, 1, 0) * hookSpeed * Time.deltaTime, Space.Self);
     }
 
     private void Grapple()
