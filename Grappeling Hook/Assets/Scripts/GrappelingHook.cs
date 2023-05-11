@@ -9,6 +9,9 @@ public class GrappelingHook : Rope
     private Rigidbody hookRigidbody;
     private SphereCollider hookCollider;
 
+    private bool isAttached = false;
+    private Modes grappelingHookMode;
+
     [Header("Grappelinghook Variables")]
     [SerializeField]
     private GameObject gunObject;
@@ -32,31 +35,52 @@ public class GrappelingHook : Rope
 
     private void OnShoot()
     {
-        transform.parent = null;
+        //If the hook isn't attached to a target then the player is able to shoot the hook.
+        if (!isAttached)
+        {
+            transform.parent = null;
 
-        Vector3 shootDirection = gunObject.transform.localPosition;
+            Vector3 shootDirection = gunObject.transform.localPosition;
 
-        hookRigidbody.AddForce(Vector3.forward.normalized * hookSpeed * Time.deltaTime, ForceMode.Impulse);
-        hookCollider.enabled = true;
-        hookRigidbody.useGravity = true;
+            hookRigidbody.AddForce(Vector3.forward.normalized * hookSpeed * Time.deltaTime, ForceMode.Impulse);
+            hookCollider.enabled = true;
+            hookRigidbody.useGravity = true;
 
-        StartCoroutine(Recall());
+            //The hook attepts to come back after 5...
+            StartCoroutine(Recall(5));
+        }
+        else
+        {
+            //... or 1 seconds.
+            Recall(1);
+        }
     }
 
+    //Switches between the two modes.
     private void OnSwitchMode()
     {
-
+        if (grappelingHookMode == Modes.Grappeling)
+        {
+            grappelingHookMode = Modes.Swinging;
+        }
+        else if (grappelingHookMode == Modes.Swinging)
+        {
+            grappelingHookMode = Modes.Grappeling;
+        }
     }
 
-    IEnumerator Recall()
+    IEnumerator Recall(float timer)
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(timer);
 
-        hookCollider.enabled = false;
-        hookRigidbody.useGravity = false;
-
-        transform.position = new Vector3(0, 1, 0);
-        hookRigidbody.velocity = Vector3.zero;
+        //If the hook isn't attached return the hook to the gun.
+        if (!isAttached)
+        {
+            hookCollider.enabled = false;
+            hookRigidbody.useGravity = false;
+            transform.position = new Vector3(0, 1, 0);
+            hookRigidbody.velocity = Vector3.zero;
+        }
     }
 
     private void Grapple()
@@ -64,9 +88,19 @@ public class GrappelingHook : Rope
 
     }
 
+    //What happens if you hit a target.
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Target"))
+        {
+            isAttached = true;
+        }
+
+        if (grappelingHookMode == Modes.Grappeling)
+        {
+            Grapple();
+        }
+        else if (grappelingHookMode == Modes.Swinging)
         {
 
         }
