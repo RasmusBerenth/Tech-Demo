@@ -15,8 +15,10 @@ public class GrappelingHook : Rope
     [Header("Grappelinghook Variables")]
     [SerializeField]
     private GameObject gunObject;
-    [SerializeField]
-    private GameObject hookObject;
+
+    public GameObject hookObject;
+    public GameObject ropeStartPoint;
+
     [SerializeField]
     private float hookSpeed;
     [SerializeField]
