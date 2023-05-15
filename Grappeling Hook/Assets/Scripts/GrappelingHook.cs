@@ -42,19 +42,12 @@ public class GrappelingHook : Rope
         {
             transform.parent = null;
 
-            Vector3 shootDirection = gunObject.transform.localPosition;
-
-            hookRigidbody.AddForce(Vector3.forward.normalized * hookSpeed * Time.deltaTime, ForceMode.Impulse);
+            hookRigidbody.AddRelativeForce(ropeStartPoint.transform.forward * hookSpeed * Time.deltaTime, ForceMode.Impulse);
             hookCollider.enabled = true;
             hookRigidbody.useGravity = true;
 
-            //The hook attepts to come back after 5...
-            StartCoroutine(Recall(5));
-        }
-        else
-        {
-            //... or 1 seconds.
-            Recall(1);
+            //The hook attepts to come back after 3 seconds.
+            StartCoroutine(Recall(3));
         }
     }
 
@@ -78,16 +71,16 @@ public class GrappelingHook : Rope
         //If the hook isn't attached return the hook to the gun.
         if (!isAttached)
         {
+            hookRigidbody.velocity = Vector3.zero;
+
             hookCollider.enabled = false;
             hookRigidbody.useGravity = false;
-            transform.position = new Vector3(0, 1, 0);
-            hookRigidbody.velocity = Vector3.zero;
+
+            hookObject.transform.parent = gunObject.transform;
+
+            hookObject.transform.position = gunObject.transform.position;
+            hookObject.transform.rotation = gunObject.transform.rotation;
         }
-    }
-
-    private void Grapple()
-    {
-
     }
 
     //What happens if you hit a target.
@@ -96,11 +89,12 @@ public class GrappelingHook : Rope
         if (other.CompareTag("Target"))
         {
             isAttached = true;
+            hookRigidbody.velocity = Vector3.zero;
         }
 
         if (grappelingHookMode == Modes.Grappeling)
         {
-            Grapple();
+
         }
         else if (grappelingHookMode == Modes.Swinging)
         {

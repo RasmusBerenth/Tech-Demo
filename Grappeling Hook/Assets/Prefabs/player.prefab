@@ -355,6 +355,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: IQ 3d mission 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5475216863930712189, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5475216863930712189, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5475216863930712189, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5475216863930712189, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8169145260055825894, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8169145260055825894, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8169145260055825894, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8169145260055825894, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8169145260055825894, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8169145260055825894, guid: 0557535205cf13c43b283be108ea695a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0557535205cf13c43b283be108ea695a, type: 3}
 --- !u!1 &2683950986363380961 stripped
