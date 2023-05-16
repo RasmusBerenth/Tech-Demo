@@ -24,7 +24,6 @@ public class GrappelingHook : Rope
     [SerializeField]
     private float grappelingSpeed;
 
-
     private void Awake()
     {
         controlls = new PlayerControlls();
@@ -42,7 +41,7 @@ public class GrappelingHook : Rope
         {
             transform.parent = null;
 
-            hookRigidbody.AddRelativeForce(ropeStartPoint.transform.forward * hookSpeed * Time.deltaTime, ForceMode.Impulse);
+            hookRigidbody.AddRelativeForce(hookSpeed * Time.deltaTime * gunObject.transform.forward, ForceMode.Impulse);
             hookCollider.enabled = true;
             hookRigidbody.useGravity = true;
 
@@ -78,8 +77,9 @@ public class GrappelingHook : Rope
 
             hookObject.transform.parent = gunObject.transform;
 
-            hookObject.transform.position = gunObject.transform.position;
+            hookObject.transform.position = ropeStartPoint.transform.position;
             hookObject.transform.rotation = gunObject.transform.rotation;
+
         }
     }
 

@@ -19,7 +19,6 @@ public class Rope : MonoBehaviour
     LineRenderer lr;
     GrappelingHook hook;
 
-
     private void Start()
     {
         lr = GetComponent<LineRenderer>();
