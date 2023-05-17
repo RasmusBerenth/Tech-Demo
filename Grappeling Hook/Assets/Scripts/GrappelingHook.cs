@@ -24,14 +24,26 @@ public class GrappelingHook : Rope
     [SerializeField]
     private float grappelingSpeed;
 
+    private Vector3 localPositionStart;
+    private Quaternion localRotationStart;
+
     private void Awake()
     {
         controlls = new PlayerControlls();
+
         hookRigidbody = GetComponent<Rigidbody>();
         hookCollider = GetComponent<SphereCollider>();
 
         controlls.Gameplay.Shoot.performed += ctx => OnShoot();
         controlls.Gameplay.Switch.performed += ctx => OnSwitchMode();
+    }
+
+    public new void Start()
+    {
+        base.Start();
+
+        localPositionStart = transform.localPosition;
+        localRotationStart = transform.localRotation;
     }
 
     private void OnShoot()
@@ -41,12 +53,16 @@ public class GrappelingHook : Rope
         {
             transform.parent = null;
 
-            hookRigidbody.AddRelativeForce(hookSpeed * Time.deltaTime * gunObject.transform.forward, ForceMode.Impulse);
+            hookRigidbody.AddRelativeForce(hookSpeed * Vector3.forward, ForceMode.Impulse);
             hookCollider.enabled = true;
             hookRigidbody.useGravity = true;
 
             //The hook attepts to come back after 3 seconds.
             StartCoroutine(Recall(3));
+        }
+        else
+        {
+            StartCoroutine(Recall(1));
         }
     }
 
@@ -68,19 +84,17 @@ public class GrappelingHook : Rope
         yield return new WaitForSeconds(timer);
 
         //If the hook isn't attached return the hook to the gun.
-        if (!isAttached)
-        {
-            hookRigidbody.velocity = Vector3.zero;
+        hookRigidbody.velocity = Vector3.zero;
 
-            hookCollider.enabled = false;
-            hookRigidbody.useGravity = false;
+        hookCollider.enabled = false;
+        hookRigidbody.useGravity = false;
 
-            hookObject.transform.parent = gunObject.transform;
+        hookObject.transform.SetParent(gunObject.transform);
 
-            hookObject.transform.position = ropeStartPoint.transform.position;
-            hookObject.transform.rotation = gunObject.transform.rotation;
+        hookObject.transform.localPosition = localPositionStart;
+        hookObject.transform.localRotation = localRotationStart;
 
-        }
+
     }
 
     //What happens if you hit a target.
@@ -90,16 +104,21 @@ public class GrappelingHook : Rope
         {
             isAttached = true;
             hookRigidbody.velocity = Vector3.zero;
+            hookObject.transform.position = other.transform.position;
+            hookRigidbody.useGravity = false;
+
+            if (grappelingHookMode == Modes.Grappeling)
+            {
+
+            }
+            else if (grappelingHookMode == Modes.Swinging)
+            {
+
+            }
+
         }
 
-        if (grappelingHookMode == Modes.Grappeling)
-        {
 
-        }
-        else if (grappelingHookMode == Modes.Swinging)
-        {
-
-        }
     }
 
     private void OnEnable()
