@@ -5,10 +5,13 @@ using UnityEngine;
 public class Rope : MonoBehaviour
 {
     [Header("Rope Variables")]
-    private float currentRopeLenght;
+    [SerializeField]
+    private float maxRopeLenght;
+    [SerializeField]
+    private float minRopeLenght;
 
-    LineRenderer lr;
-    GrappelingHook hook;
+    private LineRenderer lr;
+    private GrappelingHook hook;
 
     public void Start()
     {

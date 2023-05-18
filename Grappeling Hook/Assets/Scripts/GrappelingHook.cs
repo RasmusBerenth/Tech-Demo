@@ -10,6 +10,8 @@ public class GrappelingHook : Rope
     private SphereCollider hookCollider;
 
     private bool isAttached = false;
+    private bool hit = false;
+
     private Modes grappelingHookMode;
 
     [Header("Grappelinghook Variables")]
@@ -46,6 +48,14 @@ public class GrappelingHook : Rope
         localRotationStart = transform.localRotation;
     }
 
+    private void Update()
+    {
+        if (hit)
+        {
+            StopAllCoroutines();
+        }
+    }
+
     private void OnShoot()
     {
         //If the hook isn't attached to a target then the player is able to shoot the hook.
@@ -59,9 +69,11 @@ public class GrappelingHook : Rope
 
             //The hook attepts to come back after 3 seconds.
             StartCoroutine(Recall(3));
+
         }
         else
         {
+            hit = false;
             StartCoroutine(Recall(1));
         }
     }
@@ -83,9 +95,12 @@ public class GrappelingHook : Rope
     {
         yield return new WaitForSeconds(timer);
 
+        hit = false;
+
         //If the hook isn't attached return the hook to the gun.
         hookRigidbody.velocity = Vector3.zero;
 
+        isAttached = false;
         hookCollider.enabled = false;
         hookRigidbody.useGravity = false;
 
@@ -102,16 +117,13 @@ public class GrappelingHook : Rope
     {
         if (other.CompareTag("Target"))
         {
+            hit = true;
             isAttached = true;
             hookRigidbody.velocity = Vector3.zero;
             hookObject.transform.position = other.transform.position;
             hookRigidbody.useGravity = false;
 
             if (grappelingHookMode == Modes.Grappeling)
-            {
-
-            }
-            else if (grappelingHookMode == Modes.Swinging)
             {
 
             }
