@@ -2539,11 +2539,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 1
---- !u!1 &708439668 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6480861279887989051, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
-  m_PrefabInstance: {fileID: 7978068965583014342}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &745516185
 GameObject:
   m_ObjectHideFlags: 0
@@ -3603,11 +3598,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1.0000001}
   m_Center: {x: 0.0000009536743, y: 0, z: -0.00000023841858}
---- !u!1 &1279856121 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7978068965116122679, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
-  m_PrefabInstance: {fileID: 7978068965583014342}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1288754922
 GameObject:
   m_ObjectHideFlags: 0
@@ -5927,30 +5917,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: player
       objectReference: {fileID: 0}
-    - target: {fileID: 5961486434287141761, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9990483
-      objectReference: {fileID: 0}
-    - target: {fileID: 5961486434287141761, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.043619405
-      objectReference: {fileID: 0}
-    - target: {fileID: 5961486434287141761, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7978068965116122677, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
-      propertyPath: gunObject
-      value: 
-      objectReference: {fileID: 708439668}
-    - target: {fileID: 7978068965116122677, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
-      propertyPath: hookSpeed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 7978068965116122677, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
-      propertyPath: hookObject
-      value: 
-      objectReference: {fileID: 1279856121}
     - target: {fileID: 8058133195758773284, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
       propertyPath: m_RootOrder
       value: 2

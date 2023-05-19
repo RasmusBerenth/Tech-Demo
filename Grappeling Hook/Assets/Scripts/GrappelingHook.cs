@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GrappelingHook : Rope
+public class GrappelingHook : MonoBehaviour
 {
     private PlayerControlls controlls;
     private Rigidbody hookRigidbody;
     private SphereCollider hookCollider;
 
     private bool isAttached = false;
-    private bool hit = false;
 
     private Modes grappelingHookMode;
 
@@ -18,7 +17,10 @@ public class GrappelingHook : Rope
     [SerializeField]
     private GameObject gunObject;
 
-    public GameObject hookObject;
+    [SerializeField]
+    private GameObject _hookObject;
+    public GameObject hookObject => _hookObject;
+
     public GameObject ropeStartPoint;
 
     [SerializeField]
@@ -28,6 +30,12 @@ public class GrappelingHook : Rope
 
     private Vector3 localPositionStart;
     private Quaternion localRotationStart;
+
+    public GrappelingHook(GameObject hookObject, GameObject ropeStartPoint)
+    {
+        hookObject = this.hookObject;
+        ropeStartPoint = this.ropeStartPoint;
+    }
 
     private void Awake()
     {
@@ -40,17 +48,15 @@ public class GrappelingHook : Rope
         controlls.Gameplay.Switch.performed += ctx => OnSwitchMode();
     }
 
-    public new void Start()
+    public void Start()
     {
-        base.Start();
-
         localPositionStart = transform.localPosition;
         localRotationStart = transform.localRotation;
     }
 
     private void Update()
     {
-        if (hit)
+        if (isAttached)
         {
             StopAllCoroutines();
         }
@@ -73,7 +79,7 @@ public class GrappelingHook : Rope
         }
         else
         {
-            hit = false;
+            isAttached = false;
             StartCoroutine(Recall(1));
         }
     }
@@ -81,21 +87,23 @@ public class GrappelingHook : Rope
     //Switches between the two modes.
     private void OnSwitchMode()
     {
+        if (grappelingHookMode == Modes.Swinging)
+        {
+            grappelingHookMode = Modes.Grappeling;
+            Debug.Log(grappelingHookMode);
+        }
+
         if (grappelingHookMode == Modes.Grappeling)
         {
             grappelingHookMode = Modes.Swinging;
+            Debug.Log(grappelingHookMode);
         }
-        else if (grappelingHookMode == Modes.Swinging)
-        {
-            grappelingHookMode = Modes.Grappeling;
-        }
+
     }
 
     IEnumerator Recall(float timer)
     {
         yield return new WaitForSeconds(timer);
-
-        hit = false;
 
         //If the hook isn't attached return the hook to the gun.
         hookRigidbody.velocity = Vector3.zero;
@@ -108,8 +116,6 @@ public class GrappelingHook : Rope
 
         hookObject.transform.localPosition = localPositionStart;
         hookObject.transform.localRotation = localRotationStart;
-
-
     }
 
     //What happens if you hit a target.
@@ -117,7 +123,6 @@ public class GrappelingHook : Rope
     {
         if (other.CompareTag("Target"))
         {
-            hit = true;
             isAttached = true;
             hookRigidbody.velocity = Vector3.zero;
             hookObject.transform.position = other.transform.position;
@@ -127,10 +132,7 @@ public class GrappelingHook : Rope
             {
 
             }
-
         }
-
-
     }
 
     private void OnEnable()

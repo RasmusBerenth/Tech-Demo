@@ -31,9 +31,4 @@ public class Rope : MonoBehaviour
         lr.SetPosition(0, hook.ropeStartPoint.transform.position);
         lr.SetPosition(1, hook.hookObject.transform.position);
     }
-
-    public void AlterRopeLenght()
-    {
-
-    }
 }
