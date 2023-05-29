@@ -17,25 +17,26 @@ public class GrappelingHook : MonoBehaviour
     [SerializeField]
     private GameObject gunObject;
 
-    [SerializeField]
-    private GameObject _hookObject;
-    public GameObject hookObject => _hookObject;
-
+    public GameObject hookObject;
     public GameObject ropeStartPoint;
 
     [SerializeField]
     private float hookSpeed;
     [SerializeField]
     private float grappelingSpeed;
+    [SerializeField]
+    float jointSpring;
+    [SerializeField]
+    float jointDamper;
+    [SerializeField]
+    float jointMassScale;
 
     private Vector3 localPositionStart;
     private Quaternion localRotationStart;
 
-    public GrappelingHook(GameObject hookObject, GameObject ropeStartPoint)
-    {
-        hookObject = this.hookObject;
-        ropeStartPoint = this.ropeStartPoint;
-    }
+    private SpringJoint joint;
+    private Rope rope;
+    public GameObject player;
 
     private void Awake()
     {
@@ -43,6 +44,7 @@ public class GrappelingHook : MonoBehaviour
 
         hookRigidbody = GetComponent<Rigidbody>();
         hookCollider = GetComponent<SphereCollider>();
+        rope = GetComponent<Rope>();
 
         controlls.Gameplay.Shoot.performed += ctx => OnShoot();
         controlls.Gameplay.Switch.performed += ctx => OnSwitchMode();
@@ -56,10 +58,7 @@ public class GrappelingHook : MonoBehaviour
 
     private void Update()
     {
-        if (isAttached)
-        {
-            StopAllCoroutines();
-        }
+        if (isAttached) { StopAllCoroutines(); }
     }
 
     private void OnShoot()
@@ -74,7 +73,7 @@ public class GrappelingHook : MonoBehaviour
             hookRigidbody.useGravity = true;
 
             //The hook attepts to come back after 3 seconds.
-            StartCoroutine(Recall(3));
+            StartCoroutine(Recall(1.5f));
 
         }
         else
@@ -92,8 +91,7 @@ public class GrappelingHook : MonoBehaviour
             grappelingHookMode = Modes.Grappeling;
             Debug.Log(grappelingHookMode);
         }
-
-        if (grappelingHookMode == Modes.Grappeling)
+        else
         {
             grappelingHookMode = Modes.Swinging;
             Debug.Log(grappelingHookMode);
@@ -104,6 +102,8 @@ public class GrappelingHook : MonoBehaviour
     IEnumerator Recall(float timer)
     {
         yield return new WaitForSeconds(timer);
+
+        Destroy(joint);
 
         //If the hook isn't attached return the hook to the gun.
         hookRigidbody.velocity = Vector3.zero;
@@ -123,16 +123,38 @@ public class GrappelingHook : MonoBehaviour
     {
         if (other.CompareTag("Target"))
         {
+            //Sets the position where the hook hit.
             isAttached = true;
             hookRigidbody.velocity = Vector3.zero;
-            hookObject.transform.position = other.transform.position;
             hookRigidbody.useGravity = false;
 
-            if (grappelingHookMode == Modes.Grappeling)
-            {
+            if (grappelingHookMode == Modes.Swinging) { Swinging(); }
 
-            }
+            if (grappelingHookMode == Modes.Grappeling) { Grappeling(); }
         }
+    }
+
+    private void Swinging()
+    {
+        //Sets a base distance between the player and hook object.
+        float distanceFromPoint = Vector3.Distance(player.transform.position, hookObject.transform.position);
+
+        //Sets up the settings of the joint for swinging.
+        joint = hookObject.gameObject.AddComponent<SpringJoint>();
+        joint.autoConfigureConnectedAnchor = false;
+        joint.connectedAnchor = hookObject.transform.position;
+
+        joint.maxDistance = distanceFromPoint * rope.maxRopeLenght;
+        joint.minDistance = distanceFromPoint * rope.minRopeLenght;
+
+        joint.spring = jointSpring;
+        joint.damper = jointDamper;
+        joint.massScale = jointMassScale;
+    }
+
+    private void Grappeling()
+    {
+
     }
 
     private void OnEnable()
