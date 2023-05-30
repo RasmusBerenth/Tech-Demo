@@ -19,6 +19,7 @@ public class GrappelingHook : MonoBehaviour
 
     public GameObject hookObject;
     public GameObject ropeStartPoint;
+    public GameObject playerObject;
 
     [SerializeField]
     private float hookSpeed;
@@ -36,7 +37,6 @@ public class GrappelingHook : MonoBehaviour
 
     private SpringJoint joint;
     private Rope rope;
-    public GameObject player;
 
     private void Awake()
     {
@@ -48,6 +48,8 @@ public class GrappelingHook : MonoBehaviour
 
         controlls.Gameplay.Shoot.performed += ctx => OnShoot();
         controlls.Gameplay.Switch.performed += ctx => OnSwitchMode();
+
+        grappelingHookMode = Modes.Swinging;
     }
 
     public void Start()
@@ -137,12 +139,13 @@ public class GrappelingHook : MonoBehaviour
     private void Swinging()
     {
         //Sets a base distance between the player and hook object.
-        float distanceFromPoint = Vector3.Distance(player.transform.position, hookObject.transform.position);
+        float distanceFromPoint = Vector3.Distance(playerObject.transform.position, hookObject.transform.position);
 
         //Sets up the settings of the joint for swinging.
         joint = hookObject.gameObject.AddComponent<SpringJoint>();
         joint.autoConfigureConnectedAnchor = false;
         joint.connectedAnchor = hookObject.transform.position;
+        //joint.connectedBody = playerObject.GetComponent<Rigidbody>();
 
         joint.maxDistance = distanceFromPoint * rope.maxRopeLenght;
         joint.minDistance = distanceFromPoint * rope.minRopeLenght;
