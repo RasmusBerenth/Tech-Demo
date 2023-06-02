@@ -55,7 +55,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2540731420817496168}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15, y: 3.9, z: 4.85}
+  m_LocalPosition: {x: -0.15, y: 3.87, z: 5.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -586,10 +586,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunObject: {fileID: 6480861279887989051}
-  _hookObject: {fileID: 7978068965116122679}
+  hookObject: {fileID: 7978068965116122679}
   ropeStartPoint: {fileID: 2540731420817496168}
+  playerObject: {fileID: 3858447585607544218}
   hookSpeed: 30
   grappelingSpeed: 100
+  jointSpring: 4.5
+  jointDamper: 7
+  jointMassScale: 4.5
 --- !u!114 &1279856127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,8 +606,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5085a50c569cd8540989b85af82afcb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRopeLenght: 0
-  minRopeLenght: 0
+  _maxRopeLenght: 0.5
+  _minRopeLenght: 0.25
 --- !u!1 &8959625238948848203
 GameObject:
   m_ObjectHideFlags: 0

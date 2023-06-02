@@ -23,8 +23,6 @@ public class GrappelingHook : MonoBehaviour
 
     [SerializeField]
     private float hookSpeed;
-    [SerializeField]
-    private float grappelingSpeed;
 
     [Header("Joint Variables")]
     [SerializeField]
@@ -33,6 +31,8 @@ public class GrappelingHook : MonoBehaviour
     float jointDamper;
     [SerializeField]
     float jointMassScale;
+    [SerializeField]
+    private float grappelingSpeed;
 
     private Vector3 localPositionStart;
     private Quaternion localRotationStart;
@@ -132,6 +132,17 @@ public class GrappelingHook : MonoBehaviour
             hookRigidbody.velocity = Vector3.zero;
             hookRigidbody.useGravity = false;
 
+            //Sets a base distance between the player and hook object.
+            float distanceFromPoint = Vector3.Distance(playerObject.transform.position, hookObject.transform.position);
+
+            //Sets up the settings of the joint for swinging.
+            joint = playerObject.gameObject.AddComponent<SpringJoint>();
+            joint.autoConfigureConnectedAnchor = false;
+            joint.connectedAnchor = hookObject.transform.position;
+
+            joint.maxDistance = distanceFromPoint * rope.maxRopeLenght;
+            joint.minDistance = distanceFromPoint * rope.minRopeLenght;
+
             if (grappelingHookMode == Modes.Swinging) { Swinging(); }
 
             if (grappelingHookMode == Modes.Grappeling) { Grappeling(); }
@@ -140,17 +151,6 @@ public class GrappelingHook : MonoBehaviour
 
     private void Swinging()
     {
-        //Sets a base distance between the player and hook object.
-        float distanceFromPoint = Vector3.Distance(playerObject.transform.position, hookObject.transform.position);
-
-        //Sets up the settings of the joint for swinging.
-        joint = playerObject.gameObject.AddComponent<SpringJoint>();
-        joint.autoConfigureConnectedAnchor = false;
-        joint.connectedAnchor = hookObject.transform.position;
-
-        joint.maxDistance = distanceFromPoint * rope.maxRopeLenght;
-        joint.minDistance = distanceFromPoint * rope.minRopeLenght;
-
         joint.spring = jointSpring;
         joint.damper = jointDamper;
         joint.massScale = jointMassScale;
@@ -158,7 +158,9 @@ public class GrappelingHook : MonoBehaviour
 
     private void Grappeling()
     {
-
+        playerObject.transform.Translate(hookObject.transform.position * grappelingSpeed, Space.Self);
+        isAttached = false;
+        Recall(0.5f);
     }
 
     private void OnEnable()
