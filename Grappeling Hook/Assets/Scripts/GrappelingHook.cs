@@ -158,7 +158,11 @@ public class GrappelingHook : MonoBehaviour
 
     private void Grappeling()
     {
-        playerObject.transform.Translate(hookObject.transform.position * grappelingSpeed, Space.Self);
+        //playerObject.transform.Translate(hookObject.transform.position * grappelingSpeed, Space.Self);
+        joint.spring = grappelingSpeed;
+        joint.damper = jointDamper;
+        joint.massScale = jointMassScale;
+
         isAttached = false;
         Recall(0.5f);
     }
