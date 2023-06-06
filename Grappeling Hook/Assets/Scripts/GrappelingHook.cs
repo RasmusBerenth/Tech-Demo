@@ -19,7 +19,9 @@ public class GrappelingHook : MonoBehaviour
 
     public GameObject hookObject;
     public GameObject ropeStartPoint;
-    public GameObject playerObject;
+
+    [SerializeField]
+    private GameObject playerObject;
 
     [SerializeField]
     private float hookSpeed;
@@ -31,8 +33,6 @@ public class GrappelingHook : MonoBehaviour
     float jointDamper;
     [SerializeField]
     float jointMassScale;
-    [SerializeField]
-    private float grappelingSpeed;
 
     private Vector3 localPositionStart;
     private Quaternion localRotationStart;
@@ -56,8 +56,8 @@ public class GrappelingHook : MonoBehaviour
 
     public void Start()
     {
-        localPositionStart = transform.localPosition;
         localRotationStart = transform.localRotation;
+        localPositionStart = transform.localPosition;
     }
 
     private void Update()
@@ -71,14 +71,13 @@ public class GrappelingHook : MonoBehaviour
         if (!isAttached)
         {
             transform.parent = null;
-
+            hookRigidbody.isKinematic = false;
             hookRigidbody.AddRelativeForce(hookSpeed * Vector3.forward, ForceMode.Impulse);
             hookCollider.enabled = true;
             hookRigidbody.useGravity = true;
 
             //The hook attepts to come back after 3 seconds.
             StartCoroutine(Recall(1.5f));
-
         }
         else
         {
@@ -111,7 +110,7 @@ public class GrappelingHook : MonoBehaviour
 
         //If the hook isn't attached return the hook to the gun.
         hookRigidbody.velocity = Vector3.zero;
-
+        hookRigidbody.isKinematic = true;
         isAttached = false;
         hookCollider.enabled = false;
         hookRigidbody.useGravity = false;
@@ -158,10 +157,7 @@ public class GrappelingHook : MonoBehaviour
 
     private void Grappeling()
     {
-        //playerObject.transform.Translate(hookObject.transform.position * grappelingSpeed, Space.Self);
-        joint.spring = grappelingSpeed;
-        joint.damper = jointDamper;
-        joint.massScale = jointMassScale;
+        Vector3.MoveTowards(playerObject.transform.position, hookObject.transform.position, 1);
 
         isAttached = false;
         Recall(0.5f);

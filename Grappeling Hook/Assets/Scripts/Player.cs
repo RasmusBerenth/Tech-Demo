@@ -56,6 +56,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+
+
         //Cheacks whether the character is on the ground or not.
         isGrounded = Physics.CheckSphere(groundCheackTransform.position, groundRadious, whatIsGround);
 
