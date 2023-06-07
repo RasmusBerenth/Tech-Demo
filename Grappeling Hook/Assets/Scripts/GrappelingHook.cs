@@ -10,8 +10,16 @@ public class GrappelingHook : MonoBehaviour
     private SphereCollider hookCollider;
 
     private bool isAttached = false;
+    public bool isGrappeling = false;
 
-    private Modes grappelingHookMode;
+    public Modes grappelingHookMode;
+
+    private Vector3 localPositionStart;
+    private Quaternion localRotationStart;
+    private Vector3 localScaleStart;
+
+    private SpringJoint joint;
+    private Rope rope;
 
     [Header("Grappelinghook Variables")]
     [SerializeField]
@@ -22,7 +30,6 @@ public class GrappelingHook : MonoBehaviour
 
     [SerializeField]
     private GameObject playerObject;
-
     [SerializeField]
     private float hookSpeed;
 
@@ -34,11 +41,6 @@ public class GrappelingHook : MonoBehaviour
     [SerializeField]
     float jointMassScale;
 
-    private Vector3 localPositionStart;
-    private Quaternion localRotationStart;
-
-    private SpringJoint joint;
-    private Rope rope;
 
     private void Awake()
     {
@@ -58,11 +60,13 @@ public class GrappelingHook : MonoBehaviour
     {
         localRotationStart = transform.localRotation;
         localPositionStart = transform.localPosition;
+        localScaleStart = transform.localScale;
     }
 
     private void Update()
     {
         if (isAttached) { StopAllCoroutines(); }
+        if (isGrappeling) { hookSpeed = 55; }
     }
 
     private void OnShoot()
@@ -76,30 +80,28 @@ public class GrappelingHook : MonoBehaviour
             hookCollider.enabled = true;
             hookRigidbody.useGravity = true;
 
-            //The hook attepts to come back after 3 seconds.
-            StartCoroutine(Recall(1.5f));
+            //The hook attepts to come back after an assigned time.
+            StartCoroutine(Recall(1f));
         }
         else
         {
+            //Calls back the hook when allready attached.
             isAttached = false;
             StartCoroutine(Recall(0.2f));
         }
     }
 
-    //Switches between the two modes.
     private void OnSwitchMode()
     {
+        //Switches between the two modes.
         if (grappelingHookMode == Modes.Swinging)
         {
             grappelingHookMode = Modes.Grappeling;
-            Debug.Log(grappelingHookMode);
         }
         else
         {
             grappelingHookMode = Modes.Swinging;
-            Debug.Log(grappelingHookMode);
         }
-
     }
 
     IEnumerator Recall(float timer)
@@ -110,8 +112,11 @@ public class GrappelingHook : MonoBehaviour
 
         //If the hook isn't attached return the hook to the gun.
         hookRigidbody.velocity = Vector3.zero;
-        hookRigidbody.isKinematic = true;
+
         isAttached = false;
+        isGrappeling = false;
+
+        hookRigidbody.isKinematic = true;
         hookCollider.enabled = false;
         hookRigidbody.useGravity = false;
 
@@ -119,6 +124,7 @@ public class GrappelingHook : MonoBehaviour
 
         hookObject.transform.localPosition = localPositionStart;
         hookObject.transform.localRotation = localRotationStart;
+        hookObject.transform.localScale = localScaleStart;
     }
 
     //What happens if you hit a target.
@@ -157,10 +163,12 @@ public class GrappelingHook : MonoBehaviour
 
     private void Grappeling()
     {
-        Vector3.MoveTowards(playerObject.transform.position, hookObject.transform.position, 1);
+        isGrappeling = true;
+        //Moves player towards the hook.
+        playerObject.transform.position = Vector3.MoveTowards(playerObject.transform.position, hookObject.transform.position, 1);
 
         isAttached = false;
-        Recall(0.5f);
+        StartCoroutine(Recall(1f));
     }
 
     private void OnEnable()

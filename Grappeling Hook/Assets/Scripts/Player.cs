@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 {
     private PlayerControlls controlls;
     private Rigidbody rb;
+    private GrappelingHook hook;
 
     private float xRotation = 0f;
     private float yRotation = 0f;
@@ -32,6 +33,7 @@ public class Player : MonoBehaviour
     private float runningSpeed;
     [SerializeField]
     private float jumpHeight;
+    public float maxSpeed;
 
     [Header("GroundCheack veriables")]
     [SerializeField]
@@ -42,6 +44,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        hook = GameObject.Find("hookBase").GetComponent<GrappelingHook>();
 
         //Sets up controll map.
         controlls = new PlayerControlls();
@@ -49,21 +52,31 @@ public class Player : MonoBehaviour
         controlls.Gameplay.Jump.performed += ctx => OnJump();
         controlls.Gameplay.Run.performed += ctx => OnRunning(ctx);
         controlls.Gameplay.Run.canceled += ctx => OnRunning(ctx);
-
-        //Sets the cursor to the center of the screen.
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
-
-
         //Cheacks whether the character is on the ground or not.
         isGrounded = Physics.CheckSphere(groundCheackTransform.position, groundRadious, whatIsGround);
+
+        //Changing speed limit when grappeling.
+        if (hook.isGrappeling)
+        {
+            maxSpeed = 15;
+        }
 
         //Makes sure that movement and aiming goes smoothly fram to fram.
         OnAim();
         OnWalking();
+    }
+
+    private void FixedUpdate()
+    {
+        //Sets speed limit for player.
+        if (rb.velocity.magnitude > maxSpeed)
+        {
+            rb.velocity = rb.velocity.normalized * maxSpeed;
+        }
     }
 
     private void OnJump()
@@ -79,6 +92,7 @@ public class Player : MonoBehaviour
     {
         Vector3 moveDirection = controlls.Gameplay.Movement.ReadValue<Vector3>();
 
+        //Alter movement speed depending on inputs.
         if (isRunning == true)
         {
             transform.Translate(moveDirection * runningSpeed * Time.deltaTime, Space.Self);
@@ -89,7 +103,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    //While holding "run button" (in this case SHIFT) enable running.
     private void OnRunning(InputAction.CallbackContext context)
     {
         isRunning = context.ReadValueAsButton();
