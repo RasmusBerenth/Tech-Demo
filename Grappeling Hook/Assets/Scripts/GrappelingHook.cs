@@ -66,19 +66,15 @@ public class GrappelingHook : MonoBehaviour
     private void Update()
     {
         if (isAttached) { StopAllCoroutines(); }
-
     }
 
     //Controlls grappeling effect.
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (isGrappeling)
         {
             //Moves player towards the hook.
             Vector3.MoveTowards(playerObject.transform.position, hookObject.transform.position, 1);
-
-            isAttached = false;
-            StartCoroutine(Recall(1f));
         }
     }
 
@@ -119,15 +115,12 @@ public class GrappelingHook : MonoBehaviour
 
     IEnumerator Recall(float timer)
     {
+        //If the hook isn't attached return the hook to the gun.
         yield return new WaitForSeconds(timer);
 
         Destroy(joint);
 
-        //If the hook isn't attached return the hook to the gun.
         hookRigidbody.velocity = Vector3.zero;
-
-        isAttached = false;
-        isGrappeling = false;
 
         hookRigidbody.isKinematic = true;
         hookCollider.enabled = false;
@@ -163,7 +156,12 @@ public class GrappelingHook : MonoBehaviour
 
             if (grappelingHookMode == Modes.Swinging) { Swinging(); }
 
-            if (grappelingHookMode == Modes.Grappeling) { isGrappeling = true; }
+            if (grappelingHookMode == Modes.Grappeling)
+            {
+                isGrappeling = true;
+                isAttached = false;
+                StartCoroutine(Recall(1f));
+            }
         }
     }
 

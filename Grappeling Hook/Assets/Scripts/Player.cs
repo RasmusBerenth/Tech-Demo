@@ -10,19 +10,15 @@ public class Player : MonoBehaviour
     private Rigidbody rb;
     private GrappelingHook hook;
 
-    private float xRotation = 0f;
-    private float yRotation = 0f;
-
     private bool isRunning;
     private bool isGrounded;
+    private float xRotation = 0f;
 
     [Header("Transforms")]
     [SerializeField]
-    private Transform cameraTransform;
-    [SerializeField]
-    private Transform playerTransform;
-    [SerializeField]
     private Transform groundCheackTransform;
+    [SerializeField]
+    private Transform cameraTransform;
 
     [Header("Movement veriables")]
     [SerializeField]
@@ -70,11 +66,9 @@ public class Player : MonoBehaviour
             maxSpeed = 11;
         }
 
-        //Makes sure that movement and aiming goes smoothly fram to fram.
-        OnAim();
+        //Makes sure that movement is possible.
         OnWalking();
     }
-
     private void FixedUpdate()
     {
         //Sets speed limit for player.
@@ -83,23 +77,42 @@ public class Player : MonoBehaviour
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
     }
-
-    private void OnJump()
+    private void LateUpdate()
     {
-        //Makes the player jump when they are on the ground.
-        if (isGrounded)
-        {
-            rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
-        }
+        //Lets the player look around.
+        OnAim();
+    }
+
+    private void OnAim()
+    {
+        Vector2 mouseDirection = controlls.Gameplay.Aim.ReadValue<Vector2>();
+        //mouseSensativety is set to 100 in the editor.
+        //mouseSensativety needs to be changed from 100 to 8 when making build.(Not sure why...)
+        float mouseX = mouseDirection.x * mouseSensativety * Time.deltaTime;
+        float mouseY = mouseDirection.y * mouseSensativety * Time.deltaTime;
+
+        //Turns the camera with the cursor when it moves up an down.
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 60);
+        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        cameraTransform.Rotate(Vector3.up * mouseX);
+
+        //rotate player left and right
+        transform.Rotate(Vector3.up * mouseX);
     }
 
     private void OnWalking()
     {
         Vector3 moveDirection = controlls.Gameplay.Movement.ReadValue<Vector3>();
 
-        if (isGrounded && moveDirection == Vector3.zero)
+        //Makes shore that the player can't move while swinging.
+        if (hook.isAttached)
         {
-            rb.velocity.Normalize();
+            controlls.Gameplay.Movement.Disable();
+        }
+        else
+        {
+            controlls.Gameplay.Movement.Enable();
         }
 
         //Alter movement speed depending on inputs.
@@ -113,28 +126,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnJump()
+    {
+        //Makes the player jump when they are on the ground.
+        if (isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+        }
+    }
+
     private void OnRunning(InputAction.CallbackContext context)
     {
         isRunning = context.ReadValueAsButton();
-    }
-
-    private void OnAim()
-    {
-        Vector2 mouseDirection = controlls.Gameplay.Aim.ReadValue<Vector2>();
-        float mouseX = mouseDirection.x * mouseSensativety * Time.deltaTime;
-        float mouseY = mouseDirection.y * mouseSensativety * Time.deltaTime;
-
-        //Turns the camera with the cursor when it moves up an down.
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 60);
-
-        cameraTransform.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-        cameraTransform.Rotate(Vector3.up * mouseX);
-
-        //Turns the player with the cursor when it moves left or right.
-        yRotation -= mouseX;
-        playerTransform.transform.localRotation = Quaternion.Euler(0, -yRotation, 0);
-        playerTransform.Rotate(Vector3.up * mouseX);
     }
 
     private void OnEnable()

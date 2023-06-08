@@ -33,6 +33,12 @@ public class UI : MonoBehaviour
             grappleLable.SetActive(true);
             swingLable.SetActive(false);
         }
+
+        //Ends program when pressing Escape.
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     public void StartMenu()
@@ -43,5 +49,6 @@ public class UI : MonoBehaviour
 
         //Sets the cursor to the center of the screen.
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }
