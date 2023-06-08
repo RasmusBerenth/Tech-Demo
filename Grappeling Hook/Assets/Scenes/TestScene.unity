@@ -1152,7 +1152,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173112238}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 64.8, y: 11.1, z: -151}
+  m_LocalPosition: {x: 64.8, y: 11.1, z: -136.7}
   m_LocalScale: {x: 30, y: 25, z: 40}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4990,11 +4990,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2640209931632732986, guid: 17dae6d2e2165774a83c999e0e4af301, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -75.55
+      value: -74.56
       objectReference: {fileID: 0}
     - target: {fileID: 2640209931632732986, guid: 17dae6d2e2165774a83c999e0e4af301, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 61.85
+      value: 65.47
       objectReference: {fileID: 0}
     - target: {fileID: 2640209931632732986, guid: 17dae6d2e2165774a83c999e0e4af301, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7630,15 +7630,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2640209931632732986, guid: 17dae6d2e2165774a83c999e0e4af301, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -105.26
+      value: -101.65
       objectReference: {fileID: 0}
     - target: {fileID: 2640209931632732986, guid: 17dae6d2e2165774a83c999e0e4af301, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 69.69
+      value: 73.98
       objectReference: {fileID: 0}
     - target: {fileID: 2640209931632732986, guid: 17dae6d2e2165774a83c999e0e4af301, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -65.88
+      value: -60.47
       objectReference: {fileID: 0}
     - target: {fileID: 2640209931632732986, guid: 17dae6d2e2165774a83c999e0e4af301, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10292,6 +10292,10 @@ PrefabInstance:
     - target: {fileID: 1011583591624773413, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
       propertyPath: maxSpeed
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011583591624773413, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
+      propertyPath: walkingSpeed
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3858447585607544218, guid: d1827a6a16ff98e47a43458a4724c5e7, type: 3}
       propertyPath: m_Name

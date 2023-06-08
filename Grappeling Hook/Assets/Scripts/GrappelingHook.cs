@@ -9,7 +9,7 @@ public class GrappelingHook : MonoBehaviour
     private Rigidbody hookRigidbody;
     private SphereCollider hookCollider;
 
-    private bool isAttached = false;
+    public bool isAttached = false;
     public bool isGrappeling = false;
 
     public Modes grappelingHookMode;
@@ -66,7 +66,20 @@ public class GrappelingHook : MonoBehaviour
     private void Update()
     {
         if (isAttached) { StopAllCoroutines(); }
-        if (isGrappeling) { hookSpeed = 55; }
+
+    }
+
+    //Controlls grappeling effect.
+    private void LateUpdate()
+    {
+        if (isGrappeling)
+        {
+            //Moves player towards the hook.
+            Vector3.MoveTowards(playerObject.transform.position, hookObject.transform.position, 1);
+
+            isAttached = false;
+            StartCoroutine(Recall(1f));
+        }
     }
 
     private void OnShoot()
@@ -150,25 +163,16 @@ public class GrappelingHook : MonoBehaviour
 
             if (grappelingHookMode == Modes.Swinging) { Swinging(); }
 
-            if (grappelingHookMode == Modes.Grappeling) { Grappeling(); }
+            if (grappelingHookMode == Modes.Grappeling) { isGrappeling = true; }
         }
     }
 
+    //Controlls swinging effect.
     private void Swinging()
     {
         joint.spring = jointSpring;
         joint.damper = jointDamper;
         joint.massScale = jointMassScale;
-    }
-
-    private void Grappeling()
-    {
-        isGrappeling = true;
-        //Moves player towards the hook.
-        playerObject.transform.position = Vector3.MoveTowards(playerObject.transform.position, hookObject.transform.position, 1);
-
-        isAttached = false;
-        StartCoroutine(Recall(1f));
     }
 
     private void OnEnable()

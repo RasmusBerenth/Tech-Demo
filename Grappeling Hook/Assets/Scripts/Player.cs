@@ -33,7 +33,8 @@ public class Player : MonoBehaviour
     private float runningSpeed;
     [SerializeField]
     private float jumpHeight;
-    public float maxSpeed;
+    [SerializeField]
+    private float maxSpeed;
 
     [Header("GroundCheack veriables")]
     [SerializeField]
@@ -64,6 +65,10 @@ public class Player : MonoBehaviour
         {
             maxSpeed = 15;
         }
+        else
+        {
+            maxSpeed = 11;
+        }
 
         //Makes sure that movement and aiming goes smoothly fram to fram.
         OnAim();
@@ -91,6 +96,11 @@ public class Player : MonoBehaviour
     private void OnWalking()
     {
         Vector3 moveDirection = controlls.Gameplay.Movement.ReadValue<Vector3>();
+
+        if (isGrounded && moveDirection == Vector3.zero)
+        {
+            rb.velocity.Normalize();
+        }
 
         //Alter movement speed depending on inputs.
         if (isRunning == true)
